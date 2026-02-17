@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
-});
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('STRIPE_SECRET_KEY is not set');
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY);
+};
 
 const PRICES = {
   pro: process.env.STRIPE_PRICE_PRO!,
@@ -18,6 +21,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid price' }, { status: 400 });
     }
 
+    const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       payment_method_types: ['card'],

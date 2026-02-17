@@ -1,19 +1,22 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
-});
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('STRIPE_SECRET_KEY is not set');
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY);
+};
 
 export async function POST(request: Request) {
   const body = await request.text();
   const sig = request.headers.get('stripe-signature')!;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
   let event: Stripe.Event;
 
   try {
+    const stripe = getStripe();
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err) {
     console.error('Webhook signature verification failed');

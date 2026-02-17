@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const getOpenAI = () => {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY is not set');
+  }
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+};
 
 const tonePrompts: Record<string, string> = {
   polite: '丁寧で礼儀正しい',
@@ -22,6 +27,7 @@ export async function POST(request: Request) {
 
     const toneDescription = tonePrompts[tone] || tonePrompts.polite;
 
+    const openai = getOpenAI();
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
