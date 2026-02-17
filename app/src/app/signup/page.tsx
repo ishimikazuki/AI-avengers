@@ -1,165 +1,95 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, ArrowLeft, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
-export default function Signup() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    shopName: '',
-    platform: 'rakuten'
-  });
-  const [isLoading, setIsLoading] = useState(false);
+export default function SignupPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    // TODO: Implement signup with Supabase
+    setLoading(true);
+    // TODO: Implement Supabase auth
     setTimeout(() => {
       window.location.href = '/dashboard';
     }, 1000);
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex">
-      {/* Form Side */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          <a href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white mb-8">
-            <ArrowLeft className="w-4 h-4" /> トップに戻る
-          </a>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center px-4">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
+          <Link href="/" className="text-3xl font-bold text-white">
+            Review<span className="text-emerald-400">Genie</span>
+          </Link>
+          <p className="text-gray-400 mt-2">無料アカウントを作成</p>
+        </div>
 
-          <div className="flex items-center gap-2 mb-8">
-            <Sparkles className="w-10 h-10 text-purple-400" />
-            <span className="text-2xl font-bold text-white">ReviewGenie</span>
-          </div>
-
-          <h1 className="text-3xl font-bold text-white mb-2">無料アカウント作成</h1>
-          <p className="text-slate-400 mb-8">月10件まで永久無料。クレジットカード不要。</p>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="bg-gray-800 rounded-2xl p-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                メールアドレス
-              </label>
+              <label className="block text-gray-300 mb-2">メールアドレス</label>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                className="w-full bg-gray-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 placeholder="you@example.com"
               />
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                パスワード
-              </label>
+              <label className="block text-gray-300 mb-2">パスワード</label>
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={8}
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                className="w-full bg-gray-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 placeholder="8文字以上"
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                ショップ名
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.shopName}
-                onChange={(e) => setFormData({ ...formData, shopName: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
-                placeholder="あなたのショップ名"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                主な販売プラットフォーム
-              </label>
-              <select
-                value={formData.platform}
-                onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
-              >
-                <option value="rakuten">楽天市場</option>
-                <option value="amazon">Amazon</option>
-                <option value="shopify">Shopify</option>
-                <option value="yahoo">Yahoo!ショッピング</option>
-                <option value="other">その他</option>
-              </select>
-            </div>
-
             <button
               type="submit"
-              disabled={isLoading}
-              className="w-full bg-purple-500 hover:bg-purple-600 disabled:bg-purple-500/50 text-white py-3 rounded-lg font-medium transition flex items-center justify-center gap-2"
+              disabled={loading}
+              className="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-500 transition disabled:opacity-50"
             >
-              {isLoading ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  作成中...
-                </>
-              ) : (
-                'アカウントを作成'
-              )}
+              {loading ? '登録中...' : '無料で始める'}
             </button>
-
-            <p className="text-center text-slate-400 text-sm">
-              アカウントをお持ちですか？{' '}
-              <a href="/login" className="text-purple-400 hover:text-purple-300">
-                ログイン
-              </a>
-            </p>
-
-            <p className="text-center text-slate-500 text-xs">
-              作成することで
-              <a href="/terms" className="text-purple-400 hover:underline">利用規約</a>
-              と
-              <a href="/privacy" className="text-purple-400 hover:underline">プライバシーポリシー</a>
-              に同意したことになります。
-            </p>
           </form>
-        </div>
-      </div>
 
-      {/* Info Side */}
-      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-600 to-pink-600 items-center justify-center p-8">
-        <div className="max-w-md text-white">
-          <h2 className="text-3xl font-bold mb-6">
-            1分でセットアップ完了
-          </h2>
-          <ul className="space-y-4">
-            {[
-              'アカウント作成（今ここ）',
-              'レビューを貼り付け',
-              'AIが返信を生成',
-              'コピーして投稿',
-            ].map((item, i) => (
-              <li key={i} className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-medium">
-                  {i + 1}
-                </div>
-                <span className="text-lg">{item}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 p-6 bg-white/10 rounded-xl backdrop-blur">
-            <p className="text-purple-100 italic">
-              "導入初日から返信作業が楽になりました。もう手放せません！"
+          <div className="mt-6 text-center">
+            <p className="text-gray-400">
+              すでにアカウントをお持ちですか？{' '}
+              <Link href="/login" className="text-emerald-400 hover:underline">
+                ログイン
+              </Link>
             </p>
-            <p className="mt-4 text-sm text-purple-200">— 楽天ショップオーナー</p>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-gray-700">
+            <button className="w-full flex items-center justify-center gap-3 bg-white text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Googleで登録
+            </button>
           </div>
         </div>
+
+        <p className="text-center text-gray-500 text-sm mt-6">
+          登録することで、
+          <Link href="/terms" className="text-emerald-400 hover:underline">利用規約</Link>
+          と
+          <Link href="/privacy" className="text-emerald-400 hover:underline">プライバシーポリシー</Link>
+          に同意したものとみなされます。
+        </p>
       </div>
     </div>
   );

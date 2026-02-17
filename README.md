@@ -1,96 +1,91 @@
 # ReviewGenie 🧞‍♂️
 
-> AIがレビュー返信を自動生成。レビュー返信作業を90%削減。
+AIでEC店舗のレビュー返信を自動化するSaaSプラットフォーム
 
-楽天・Amazon・Shopifyのレビューを貼り付けるだけで、AIが最適な返信文を瞬時に作成するSaaSツール。
+## 🚀 機能
 
-## 🚀 特徴
-
-- **簡単操作**: レビューを貼り付けてボタンを押すだけ
-- **高品質な返信**: GPT-4ベースのAIが自然な敬語で返信を生成
-- **時間節約**: 1件5分 → 30秒に短縮、月100件で8時間以上節約
-- **カスタマイズ**: 丁寧/フレンドリー/お詫びなどトーン選択可能
+- **AIレビュー返信生成**: レビューを入力するとAIが最適な返信を自動生成
+- **トーン調整**: 丁寧・カジュアル・フォーマル・フレンドリーから選択
+- **ワンクリックコピー**: 生成した返信をすぐにコピー＆ペースト
+- **履歴管理**: 過去の返信履歴を確認
+- **Stripe決済**: サブスクリプション課金に対応
 
 ## 💰 料金プラン
 
-| プラン | 月額 | 件数 | 機能 |
-|--------|------|------|------|
-| **Free** | ¥0 | 10件/月 | 基本機能 |
-| **Pro** | ¥3,000 | 100件/月 | カスタムテンプレート、履歴管理 |
-| **Business** | ¥9,800 | 無制限 | API連携、チーム管理 |
-
-**月100万円達成**: Pro × 100人 + Business × 70人 = ¥1,006,000/月
+| プラン | 月額 | 内容 |
+|--------|------|------|
+| Free | ¥0 | 月10件まで |
+| Pro | ¥3,000 | 月100件、トーン調整、API |
+| Business | ¥9,800 | 無制限、チーム機能、優先サポート |
 
 ## 🛠 技術スタック
 
-- **Frontend**: Next.js 15 + React 19 + TypeScript
-- **Styling**: Tailwind CSS
-- **Backend**: Next.js API Routes
-- **Database**: Supabase
-- **Payment**: Stripe
-- **AI**: OpenAI GPT-4
-- **Deployment**: Vercel
+- **フロントエンド**: Next.js 16 + TypeScript + Tailwind CSS
+- **バックエンド**: Next.js API Routes
+- **AI**: OpenAI GPT-4o-mini
+- **決済**: Stripe
+- **認証**: Supabase Auth (予定)
+- **データベース**: Supabase (予定)
 
-## 📁 プロジェクト構成
-
-```
-src/
-├── app/
-│   ├── page.tsx              # ランディングページ
-│   ├── signup/page.tsx       # サインアップ
-│   ├── dashboard/page.tsx    # ダッシュボード
-│   ├── pricing/page.tsx      # 料金ページ
-│   └── api/
-│       ├── checkout/route.ts # Stripe決済
-│       └── generate/route.ts # AI返信生成
-└── components/               # 共通コンポーネント
-```
-
-## 🚀 開発
+## 📦 インストール
 
 ```bash
-# 依存関係インストール
+cd app
 npm install
-
-# 環境変数設定
-cp .env.example .env.local
-# STRIPE_SECRET_KEY, OPENAI_API_KEY 等を設定
-
-# 開発サーバー起動
-npm run dev
-
-# ビルド
-npm run build
 ```
 
-## 環境変数
+## 🔧 環境変数
+
+`.env.local` を作成:
 
 ```env
 # Stripe
-STRIPE_SECRET_KEY=sk_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_...
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_PUBLISHABLE_KEY=pk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+STRIPE_PRICE_PRO=price_xxx
+STRIPE_PRICE_BUSINESS=price_xxx
 
 # OpenAI
-OPENAI_API_KEY=sk-...
-
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-SUPABASE_SERVICE_ROLE_KEY=...
+OPENAI_API_KEY=sk-xxx
 
 # App
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_URL=http://localhost:3000
 ```
 
-## 👥 開発チーム
+## 🚀 開発サーバー起動
 
-4体のAIエージェントが協力して開発:
+```bash
+npm run dev
+```
 
-- **Kai** ⚡ - OpenAI連携、レビュー生成ロジック
+http://localhost:3000 でアクセス
+
+## 📁 ディレクトリ構成
+
+```
+app/
+├── src/
+│   └── app/
+│       ├── api/
+│       │   ├── generate/      # AI返信生成API
+│       │   └── stripe/        # Stripe決済API
+│       ├── dashboard/         # ダッシュボード
+│       ├── pricing/           # 料金ページ
+│       ├── login/             # ログイン
+│       ├── signup/            # サインアップ
+│       ├── success/           # 決済成功
+│       └── page.tsx           # ランディングページ
+├── package.json
+└── ...
+```
+
+## 👥 チーム
+
+- **Kai** ⚡ - Stripe決済、OpenAI連携
 - **Axa** 🔧 - フロントエンドUI
-- **ビスク** 🦞 - Stripe決済、バックエンドAPI
-- **IKKU** 🔍 - ダッシュボード、履歴管理
+- **ビスク** 🦞 - バックエンドAPI
+- **IKKU** 🔍 - コンテンツ、SEO
 
 ## 📄 ライセンス
 
@@ -98,4 +93,4 @@ MIT
 
 ---
 
-*このプロジェクトはAI Avengers（Kai, Axa, ビスク, IKKU）が協力して開発しました。*
+Made with ❤️ by AI Crew
